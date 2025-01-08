@@ -165,7 +165,7 @@ Codes: K - kernel route, C - connected, S - static, R - RIP,
 
 B   0.0.0.0/0 [20/0] via 10.1.0.2, eth1, weight 1, 00:08:21
                      via 10.1.0.6, eth2, weight 1, 00:08:21
-K>* 0.0.0.0/0 [0/0] via 192.168.121.1, eth0, 00:33:16
+K>* 0.0.0.0/0 [0/0] via 192.168.121.1, eth0, 00:33:16                       // why the local route is selected, instead of the default route from x1/x2
 C>* 10.0.0.1/32 is directly connected, lo, 00:32:54
 C>* 10.1.0.0/30 is directly connected, eth1, 00:32:54
 C>* 10.1.0.4/30 is directly connected, eth2, 00:32:54
@@ -173,3 +173,20 @@ B>* 192.168.100.0/24 [20/0] via 10.1.0.2, eth1, weight 1, 00:08:21
 B>* 192.168.101.0/24 [20/0] via 10.1.0.6, eth2, weight 1, 00:08:21
 C>* 192.168.121.0/24 is directly connected, eth0, 00:33:16
 ```
+
+* FRR BGP route selection process prefers local routes to received routes.
+    * so the default route from kernel is prefered than the default route from x1/x2
+
+## router id vs neighbor id
+* what is router id?
+    * represents the **unique** identifier of a BGP router within a network
+    * usually derived from the highest address on the router, often from a loopback.
+    * **used in the BGP best path selection algorithm.**
+    * route id IP address doesn't need to be reachable.
+* what is neighbor id?
+    * the address of the BGP peer router.
+    * the neighbor id is used to establish the BGP session.
+    * **not used in the BGP best path selection algorithm.**
+
+## references
+* https://docs.frrouting.org/en/latest/bgp.html#route-selection
